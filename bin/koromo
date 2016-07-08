@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+require 'kajiki'
+require 'thin'
+require 'koromo'
+
+
+opts = Kajiki.preset_options(:server, {config: true})
+
+Kajiki.run(opts) do |cmd|
+  case cmd
+  when 'start'
+    Thin::Server.start(opts[:address], opts[:port]) do
+      run Koromo::Server.new(opts)
+    end
+  end
+end

@@ -1,0 +1,64 @@
+---
+# TDS options
+:mssql:
+  # The database server user
+  :user: username
+  # The user password
+  :password: p4sSw0rD
+  # Used if :dataserver blank; can be an hostname or an IP address
+  :host: 192.168.0.100
+  # Defaults to 1433; only used if :host is configured
+  :port: 1433
+  # The default database to use
+  :database: master
+  # Other TDS options can be configure as well; default examples below
+  # :login_timeout: 60
+  # :timeout: 5
+  # :encoding: UTF-8
+  # :azure: false
+
+:global:
+  :pretty_json: YES
+  # Basic security by requiring strings below to be passed in "auth" param
+  :auth_tokens:
+    :any:
+      - sEcReT_sTrInG_0N3
+      - SeCrEt_StRiNg_7W0
+
+# API definitions
+:resources:
+  # Name of the resource available via API
+  :resource1:
+    # Name of the DB table
+    :table: :table1
+    # Name of columns to return from the table
+    :columns:
+      - :id
+      - :name
+      - :description
+      - :date
+    # Name of the column to search when resource ID is present
+    :key: :id
+    # Optional; otherwise restricted to 10
+    :limit: 25
+    # Optional
+    :order: :date
+    # Optional; defaults to ASC without this option present
+    :desc: true
+    # Settings for GET calls
+    :get:
+      # Return as Hash or Array
+      :class: Hash
+      # Optional only with Hash; response will become a simple key-value pair
+      :value: :name
+  :books:
+    :table: :books
+    :columns:
+      - :id
+      - :isbn
+      - :title
+      - :author
+      - :date
+    :key: :isbn
+    :get:
+      :class: Array
