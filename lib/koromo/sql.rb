@@ -3,9 +3,17 @@ require 'sequel'
 
 module Koromo
 
-  module SQL
+  def self.sql
+    SQL.shared_instance
+  end
 
-    def setup_sql(conf)
+  class SQL
+
+    def self.shared_instance
+      @sql ||= SQL.new
+    end
+
+    def setup(conf)
       @config = conf
       # Sequel connection setup
       # Sequel.application_timezone = :local
@@ -35,20 +43,6 @@ module Koromo
         @models[name] = m
       end
       @models[name]
-    end
-
-    def run_query(query)
-      result = mssql.execute(query)
-      records = []
-      result.each(cache_rows: false) do |row|
-        record = {}
-        row.each { |k, v| record[k] = convert_value(v) }
-        records.push record
-      end
-      records
-    # rescue => e
-    #   puts e.message
-    #   raise
     end
 
     def get_resource(name, **args)

@@ -24,7 +24,7 @@ module Koromo
       return @slogger
     end
 
-    helpers Helper, SQL
+    helpers Helper
 
     configure do
       set :environment, :production
@@ -35,11 +35,11 @@ module Koromo
     before do
       # @jsonp_callback = params[:callback]
       halt 401 unless valid_token?(params[:auth])
-      setup_sql(Koromo.config)
+      Koromo.sql.setup(Koromo.config)
     end
 
     get '/:resource' do |r|
-      result = get_resource(r, params: params)
+      result = Koromo.sql.get_resource(r, params: params)
       if result
         json_with_object(result)
       else
@@ -49,7 +49,7 @@ module Koromo
 
     get '/:resource/:id' do |r, id|
       fail Sinatra::NotFound if /\W/ =~ id
-      result = get_resource(r, id: id, params: params)
+      result = Koromo.sql.get_resource(r, id: id, params: params)
       if result
         json_with_object(result)
       else
